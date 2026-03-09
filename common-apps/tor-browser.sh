@@ -25,10 +25,10 @@ else
 fi
 
 # 4. Install
-su - sv -c 'tar -xf "$FILE_BIN" -C "$INSTALL_DIR"'
+su - $TARGET_USER -c 'tar -xf "$FILE_BIN" -C "$INSTALL_DIR"'
 # 5. Register App
 cd $INSTALL_DIR/tor-browser
-su - sv -c "./start-tor-browser.desktop --register-app"
+su - $TARGET_USER -c "./start-tor-browser.desktop --register-app"
 
 cd -
 rm "$FILE_BIN"

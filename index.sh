@@ -15,6 +15,7 @@ if [ -z "$TARGET_USER" ]; then
 fi
 export TARGET_HOME=$(getent passwd $TARGET_USER | cut -d: -f6)
 export INSTALL_DIR="$TARGET_HOME/.local/share"
+export CONFIG_DIR="$TARGET_HOME/.config"
 
 # Check if the script is actually running as root
 if [ "$EUID" -ne 0 ]; then
@@ -22,7 +23,7 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-chmod -R 744 $(pwd)
+chmod -R 777 $(pwd)
 
 # Verify if user exists and has a home directory
 if ! id "$TARGET_USER" &>/dev/null || [ ! -d "/home/$TARGET_USER" ]; then
