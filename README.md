@@ -1,4 +1,4 @@
-# Apps and Config for Debian
+# Apps and Configs for Debian
 
 ## Install
 
