@@ -8,15 +8,16 @@ show_menu() {
     echo "    0) MAIN MENU"
     echo "------------------------------------------------------------"
     echo "    1) All dev apps 1x"
-    echo "    2) WebStorm"
-    echo "    3) DBeaver"
+    echo "    2) NodeJS"
+    echo "    3) WebStorm"
+    echo "    4) DBeaver"
     echo "------------------------------------------------------------"
     echo "    9) Show Log..."
     echo "------------------------------------------------------------"
 }
 
 installed() {
-    echo -e "${CYAN}=========================Installation finished==============================${NC}"
+    echo -e "${CYAN}========================= Installation finished ==============================${NC}"
     read -p "Press [Enter] to return to the menu..."
 }
 
@@ -27,8 +28,9 @@ while true; do
     case $choice in
         0) break;;
         1) ./all-tools.sh; installed ;;
-        2) ./webstorm.sh; installed ;;
-        3) ./dbeaver-ce.sh; installed ;;
+        2) ./nodejs.sh; installed ;;
+        3) ./webstorm.sh; installed ;;
+        4) ./dbeaver-ce.sh; installed ;;
         9) less $LOG_FILE ;;
         *) echo "Invalid option. Press Enter to try again."; read ;;
     esac

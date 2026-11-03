@@ -1,28 +1,29 @@
 #!/bin/bash
-
 set -euo pipefail
+
+echo -e "${GREEN}========================== LTS Node JS ==============================${NC}"
 
 BASE_URL="https://nodejs.org/dist"
 ARCH="linux-x64"
 INSTALL_DIR="/usr/local"
 
-echo "Detecting latest Node.js LTS..."
+echo -e "${GREEN} Detecting latest Node.js LTS...${NC}"
 
 VERSION=$(curl -fsSL $BASE_URL/index.json | jq -r '[.[] | select(.lts != false)][0].version')
 FILE="node-$VERSION-$ARCH.tar.xz"
 SHAFILE="SHASUMS256.txt"
 
-echo "Latest LTS: [$VERSION]"
-echo "Downloading: [$FILE]"
+echo -e "${GREEN} Latest LTS: [$VERSION] ${NC}"
+echo -e "${GREEN} Downloading: [$FILE] ${NC}"
 
 curl -O $BASE_URL/$VERSION/$FILE
 curl -O $BASE_URL/$VERSION/$SHAFILE
 
-echo "Verifying checksum..."
+echo -e "${GREEN} Verifying checksum...${NC}"
 grep "$FILE" $SHAFILE | sha256sum -c -
-echo "Checksum verified ✔"
+echo -e "${GREEN} Checksum verified ✔${NC}"
 
-echo "Removing previous Node.js install (if exists)..."
+echo -e "${GREEN} Removing previous Node.js install (if exists)...${NC}"
 sudo rm -rf \
   $INSTALL_DIR/bin/node \
   $INSTALL_DIR/bin/npm \
@@ -32,17 +33,18 @@ sudo rm -rf \
   $INSTALL_DIR/share/doc/node \
   $INSTALL_DIR/share/systemtap/tapset/node.stp 2>/dev/null || true
 
-echo "Extracting..."
+echo -e "${GREEN} Extracting...${NC}"
 tar -xJf $FILE
 
-echo "Installing to $INSTALL_DIR..."
+echo -e "${GREEN} Installing to $INSTALL_DIR...${NC}"
 tar -xJf $FILE -C $INSTALL_DIR --strip-components=1
 
-echo "Cleaning up..."
+echo -e "${GREEN} Cleaning up...${NC}"
 rm -rf node-$VERSION-$ARCH
 rm $FILE
 rm $SHAFILE
 
-echo "Installation complete 🎉"
-echo -n "node -v: "; node -v
-echo -n "npm -v: "; npm -v
+echo -e "${GREEN}=========================== Installation complete 🎉 =============================="
+echo -en " node -v: "; node -v;
+echo -en " npm -v: "; npm -v;
+echo -en "${NC}"

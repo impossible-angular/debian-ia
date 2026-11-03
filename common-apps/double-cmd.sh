@@ -28,6 +28,3 @@ chmod 664 "$DOUBLECMD_CFG_DIR/doublecmd.xml"
 #sed -i "/<Fonts>/,/<\/Fonts>/ { /<TreeViewMenu>/,/<\/TreeViewMenu>/ $REPL }" $CFG_DOUBLECMD
 #sed -i "/<Fonts>/,/<\/Fonts>/ { /<StatusBar>/,/<\/StatusBar>/ $REPL }" $CFG_DOUBLECMD
 
-echo -e "${GREEN}==========================Midnight Commander================================${NC}"
-
-apt-get install -y -qq mc 2>&1 | tee -a "$LOG_FILE"

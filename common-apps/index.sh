@@ -2,24 +2,25 @@
 
 show_menu() {
     clear
-    echo "============================================================"
-    echo -e "                       ${CYAN}COMMON APPS${NC}"
-    echo "============================================================"
-    echo "    0) MAIN MENU"
-    echo "------------------------------------------------------------"
-    echo "    1) All common apps 1x"
-    echo "    2) Fonts Jetbrains + terminal"
-    echo "    3) File managers"
-    echo "    4) Google Chrome with dev profile and icon"
-    echo "    5) Tor browser"
-    echo "    6) Opera browser"
-    echo "------------------------------------------------------------"
-    echo "    9) Show Log..."
-    echo "------------------------------------------------------------"
+    echoE "============================================================"
+    echoB "                      COMMON APPS"
+    echoE "============================================================"
+    echoE "    0) MAIN MENU"
+    echoE "------------------------------------------------------------"
+    echoE "    1) All common apps 1x"
+    echoE "    2) Fonts Jetbrains + terminal"
+    echoE "    3) Double commander"
+    echoE "    31) MC"
+    echoE "    4) Google Chrome with dev profile and icon"
+    echoE "    5) Tor browser"
+    echoE "    6) Opera browser"
+    echoE "------------------------------------------------------------"
+    echoE "    9) Show Log..."
+    echoE "------------------------------------------------------------"
 }
 
 installed() {
-    echo -e "${CYAN}=========================Installation finished==============================${NC}"
+    echoB "========================= Installation finished ============================="
     read -p "Press [Enter] to return to the menu..."
 }
 
@@ -31,7 +32,8 @@ while true; do
         0) break;;
         1) ./all-tools.sh; installed ;;
         2) ./fonts-jetbrains.sh; installed ;;
-        3) ./file-managers.sh; installed ;;
+        3) ./double-cmd.sh; installed ;;
+        31) ./mc.sh; installed ;;
         4) ./google-chrome-dev.sh; installed ;;
         5) ./tor-browser.sh; installed ;;
         6) ./opera-browser.sh; installed ;;

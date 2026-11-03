@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # 1. Download the latest WebStorm tarball
 wget -cO webstorm.tar.gz "https://data.services.jetbrains.com/products/download?platform=linux&code=WS"
 
