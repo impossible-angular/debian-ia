@@ -2,54 +2,47 @@
 
 set -euo pipefail
 
-echo -e "${GREEN}========================== DBeaver ==============================${NC}"
+echoG "====================================== DBeaver ===================================="
 
 BASE_URL="https://dbeaver.io/files"
 ARCH="amd64"
 TMP=$(mktemp -d)
-cd "$TMP"
 
-
-echo -e "${GREEN} Fetching latest DBeaver CE version...${NC}"
+echoG "Fetching latest DBeaver CE version..."
 
 LATEST_DEB=$(curl -fsSL "${BASE_URL}/" | grep -oP "dbeaver-ce-[0-9.]+_amd64.deb" | sort -V | tail -n1)
 
-if [ -z "$LATEST_DEB" ]; then
-  echo -e "${RED} Could not determine latest DBeaver CE package${NC}"
+if [ -z "${LATEST_DEB}" ]; then
+  echoR "Could not determine latest DBeaver CE package"
   exit 1
 fi
-echo -e "${GREEN} Latest DBeaver CE package identified: $LATEST_DEB ${NC}"
+echoB "Latest DBeaver CE package identified: ${LATEST_DEB}"
 
 DEB_URL="${BASE_URL}/${LATEST_DEB}"
 CHECKSUM_URL="${BASE_URL}/checksum/${LATEST_DEB}.sha256"
+DBEAVER_INSTALL_FILE="${TMP}/${LATEST_DEB}"
+DBEAVER_CHECKSUM_FILE="${TMP}/${LATEST_DEB}.sha256"
 
-echo -e "${GREEN} Downloading .deb and SHA256 checksum... ${NC}"
-curl -fsSLO "$DEB_URL"
-curl -fsSLO "$CHECKSUM_URL"
+echoG "Downloading .deb and SHA256 checksum..."
+curl -fsSL "${DEB_URL}" -o "${DBEAVER_INSTALL_FILE}"
+curl -fsSL "${CHECKSUM_URL}" -o "${DBEAVER_CHECKSUM_FILE}"
 
 # 4) Verify checksum
-EXPECTED_HASH=$(cut -d' ' -f1 < "${LATEST_DEB}.sha256")
-ACTUAL_HASH=$(sha256sum "${LATEST_DEB}" | cut -d' ' -f1)
+EXPECTED_HASH=$(cut -d' ' -f1 < "${DBEAVER_CHECKSUM_FILE}")
+ACTUAL_HASH=$(sha256sum "${DBEAVER_INSTALL_FILE}" | cut -d' ' -f1)
 
-if [ "$EXPECTED_HASH" != "$ACTUAL_HASH" ]; then
-  echo -e "${RED} Checksum mismatch! Aborting installation. ${NC}"
+if [ "${EXPECTED_HASH}" != "${ACTUAL_HASH}" ]; then
+  echoR "Checksum mismatch! Aborting installation."
   exit 1
 fi
-
-
-echo -e "${GREEN} Checksum OK ✔ ${NC}"
+echoB "Checksum OK ✔"
 
 # 5) Install
-echo "Installing DBeaver CE..."
-sudo dpkg -i "$LATEST_DEB"
+echoG "Installing DBeaver CE..."
+dpkg -i "${DBEAVER_INSTALL_FILE}"
 
 # fix missing dependencies if any
 apt-get install -f -y
 
-echo "Installation completed successfully!"
-
-
-#wget -q -O - https://dbeaver.io/debs/dbeaver.gpg.key | gpg --dearmor -o /usr/share/keyrings/dbeaver.gpg.key
-#echo "deb [signed-by=/usr/share/keyrings/dbeaver.gpg.key] https://dbeaver.io/debs/dbeaver-ce /" | tee /etc/apt/sources.list.d/dbeaver.list
-#apt-get update
-#apt-get install -y -qq dbeaver-ce  2>&1 | tee -a "$LOG_FILE"
+echoG "Cleaning up..."
+rm -rf "${TMP_DIR}"

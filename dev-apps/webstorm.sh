@@ -2,23 +2,30 @@
 
 set -euo pipefail
 
-# 1. Download the latest WebStorm tarball
-wget -cO webstorm.tar.gz "https://data.services.jetbrains.com/products/download?platform=linux&code=WS"
+URL="https://data.services.jetbrains.com/products/download?platform=linux&code=WS"
+TMP=$(mktemp -d)
+WEBSTORM_INSTALL_FILE="${TMP}/webstorm.tar.gz"
+INSTALL_DIR="/opt/webstorm"
 
-# 2. Create the target directory (if it doesn't exist)
-mkdir -p /opt/webstorm
+# Download the latest WebStorm tarball
+wget -cO "${WEBSTORM_INSTALL_FILE}" "${URL}"
 
-# 3. Extract the contents into /opt/webstorm
+# Create the target directory (if it doesn't exist)
+mkdir -p "${INSTALL_DIR}"
+
+# Extract the contents into /opt/webstorm
 # --strip-components=1 ensures the files go directly into the folder
-tar -xzf webstorm.tar.gz -C /opt/webstorm --strip-components=1
-rm webstorm.tar.gz
+tar -xzf "${WEBSTORM_INSTALL_FILE}" -C "${INSTALL_DIR}" --strip-components=1
 
-# 4. Create a Symlink (For Terminal Access)
+echoB "Cleaning up..."
+rm -rf "${TMP_DIR}"
+
+# Create a Symlink (For Terminal Access)
 ln -s /opt/webstorm/bin/webstorm.sh /usr/local/bin/webstorm
 
-DESKTOP_FILE="$INSTALL_DIR/applications/webstorm.desktop"
+DESKTOP_FILE="${INSTALL_DIR}/applications/webstorm.desktop"
 # 5. Create the Dash Icon
-cat <<EOF > "$DESKTOP_FILE"
+cat <<EOF > "${DESKTOP_FILE}"
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -31,5 +38,5 @@ Terminal=false
 StartupWMClass=jetbrains-webstorm
 EOF
 
-# 4. Final Permission Check
+# Final Permission Check
 chmod +x /opt/webstorm/bin/webstorm.sh
