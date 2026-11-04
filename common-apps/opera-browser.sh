@@ -1,9 +1,17 @@
 #!/bin/bash
+set -euo pipefail
 
-echo -e "${GREEN}========================== opera-browser ==============================${NC}"
+echoG "========================== Opera browser =================================="
+
+TMP_DIR=$(mktemp -d)
+TMP_FILE="${TMP_DIR}/opera-browser.deb"
 
 LATEST_VERSION=$(wget -qO- https://ftp.opera.com/pub/opera/desktop/ | grep -Po 'href="\K.*?(?=/")' | sort -V | tail -n1)
-wget -O opera-browser.deb "https://ftp.opera.com/pub/opera/desktop/${LATEST_VERSION}/linux/opera-stable_${LATEST_VERSION}_amd64.deb"
+URL="https://ftp.opera.com/pub/opera/desktop/${LATEST_VERSION}/linux/opera-stable_${LATEST_VERSION}_amd64.deb"
 
-apt install ./opera-browser.deb -y 2>&1 | tee -a "$LOG_FILE"
-rm opera-browser.deb
+wget -O "${TMP_FILE}" "${URL}"
+
+apt install "${TMP_FILE}" -y 2>&1 | tee -a "${LOG_FILE}"
+
+echoG "Cleaning up..."
+rm -rf "${TMP_DIR}"

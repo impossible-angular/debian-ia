@@ -1,20 +1,26 @@
 #!/bin/bash
+set -euo pipefail
 
-# File managers: Double Commander, Midnight Commander
-echo -e "${GREEN}===========================Double Commander=================================${NC}"
+# File managers: Double Commander
+echoG "========================== Double Commander =================================="
 
-apt-get install -y -qq doublecmd-qt 2>&1 | tee -a "$LOG_FILE"
+apt-get install -y -qq doublecmd-qt 2>&1 | tee -a "${LOG_FILE}"
 
 # create config file befor first run. double commander will add other default settings to this file
-DOUBLECMD_CFG_DIR="$CONFIG_DIR/doublecmd"
-mkdir $DOUBLECMD_CFG_DIR
-cp $(pwd)/doublecmd.xml "$DOUBLECMD_CFG_DIR/doublecmd.xml"
-chown $TARGET_USER:$TARGET_USER $DOUBLECMD_CFG_DIR
-chown $TARGET_USER:$TARGET_USER "$DOUBLECMD_CFG_DIR/doublecmd.xml"
-chmod 764 $DOUBLECMD_CFG_DIR
-chmod 664 "$DOUBLECMD_CFG_DIR/doublecmd.xml"
+DOUBLECMD_CFG_DIR="${CONFIG_DIR}/doublecmd"
+DOUBLECMD_CFG_FILE="${DOUBLECMD_CFG_DIR}/doublecmd.xml"
+DOUBLECMD_MY_CFG_FILE="${HELPER_FILES}/doublecmd.xml"
+
+mkdir "${DOUBLECMD_CFG_DIR}"
+cp "${DOUBLECMD_MY_CFG_FILE}" "${DOUBLECMD_CFG_FILE}"
+
+chown ${TARGET_USER}:${TARGET_USER} "${DOUBLECMD_CFG_DIR}"
+chown ${TARGET_USER}:${TARGET_USER} "${DOUBLECMD_CFG_FILE}"
+chmod 764 "${DOUBLECMD_CFG_DIR}"
+chmod 664 "${DOUBLECMD_MY_CFG_FILE}"
 
 # replace some property in xml filse
+# doesn't works for now
 #REPL="s|<Name>.*</Name>|<Name>JetBrains Mono</Name>|"
 #sed -i "/<Fonts>/,/<\/Fonts>/ { /<Main>/,/<\/Main>/ $REPL }" $CFG_DOUBLECMD
 #sed -i "/<Fonts>/,/<\/Fonts>/ { /<Editor>/,/<\/Editor>/ $REPL }" $CFG_DOUBLECMD
