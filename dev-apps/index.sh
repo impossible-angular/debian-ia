@@ -11,6 +11,7 @@ show_menu() {
     echo "    2) NodeJS"
     echo "    3) WebStorm"
     echo "    4) DBeaver"
+    echo "    5) Docker"
     echo "------------------------------------------------------------"
     echo "    9) Show Log..."
     echo "------------------------------------------------------------"
@@ -31,6 +32,7 @@ while true; do
         2) ./nodejs.sh; installed ;;
         3) ./webstorm.sh; installed ;;
         4) ./dbeaver-ce.sh; installed ;;
+        5) ./docker.sh; installed ;;
         9) less $LOG_FILE ;;
         *) echo "Invalid option. Press Enter to try again."; read ;;
     esac
