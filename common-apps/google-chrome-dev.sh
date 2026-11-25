@@ -8,7 +8,7 @@ TMP_DIR=$(mktemp -d)
 TMP_FILE="${TMP_DIR}/google-chrome-stable_current_amd64.deb"
 
 echoG "Download..."
-wget -O "${TMP_FILE}" "${URL}"
+wget -cO "${TMP_FILE}" "${URL}"
 echoG "Install..."
 apt install "${TMP_FILE}" -y -qq 2>&1 | tee -a "${LOG_FILE}"
 echoG "Cleaning up..."

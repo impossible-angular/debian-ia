@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+#set -euo pipefail
 
 echoG "====================================== Docker ===================================="
 
@@ -31,10 +31,42 @@ systemctl status docker --no-pager
 echoB "If Docker is not running, start it manually."
 read -p " Run [systemctl status docker] - [y/n]" choice
 
-if [[ "$choice" = 'y' || "$choice" = 'Y' ]]; then
+if [ "${choice^^}" = 'Y' ]; then
   systemctl start docker
 fi
 
-echoB "Testing docker..."
+echoB "Testing docker under ROOT"
 
 docker run hello-world
+
+
+echoG "====================================== Add user to docker group and test docker under this user =============="
+
+usermod -aG docker ${TARGET_USER}
+su - ${TARGET_USER} -c "docker run hello-world"
+
+echoG "====================================== Install Docker Desktop  ===================================="
+
+read -p " Install? - [y/n]" choice
+if [ "${choice^^}" != 'Y' ]; then
+  exit 1
+fi
+
+URL_DOCKER_DESKTOP=https://desktop.docker.com/linux/main/amd64/docker-desktop-amd64.deb
+TMP_DIR=$(mktemp -d)
+DOCKER_DESKTOP_INSTALL_FILE="${TMP_DIR}/docker-desktop-amd64.deb"
+
+wget -cO "${DOCKER_DESKTOP_INSTALL_FILE}" "${URL_DOCKER_DESKTOP}"
+
+apt-get install "${DOCKER_DESKTOP_INSTALL_FILE}"
+
+echoR "Ignore this message."
+echoG "couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)"
+
+echoG "Cleaning up..."
+rm -rf "${TMP_DIR}"
+
+echoR "Generate gpg key"
+echoB "gpg --generate-key"
+echoR "Pass it"
+echoB "pass init example-3ABCD1234EF56G78-example"
