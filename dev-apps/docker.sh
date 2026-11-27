@@ -43,6 +43,7 @@ docker run hello-world
 echoG "====================================== Add user to docker group and test docker under this user =============="
 
 usermod -aG docker ${TARGET_USER}
+newgrp docker
 su - ${TARGET_USER} -c "docker run hello-world"
 
 echoG "====================================== Install Docker Desktop  ===================================="
